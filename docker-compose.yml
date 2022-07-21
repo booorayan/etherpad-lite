@@ -1,0 +1,42 @@
+version: '3'
+services:
+  etherpad:
+    build:
+      context: .
+    image: etherpad
+    environment:
+      TITLE: "Oonapad"
+      DEFAULT_PAD_TEXT: ""
+      ADMIN_PASSWORD: "traincascade"
+      DB_TYPE: "postgres"
+      DB_HOST: "etherpad-database"
+      DB_PORT: "5432"
+      DB_NAME: "etherpad"
+      DB_USER: "etherpad"
+      DB_PASS: "traincascade"
+      SKIN_VARIANTS: "super-dark-toolbar dark-background super-light-editor"
+      SOFFICE: "/usr/bin/soffice"
+      SUPPRESS_ERRORS_IN_PAD_TEXT: "true"
+      # EDIT_ONLY: "true"
+      # TIDY_HTML: "/usr/bin/tidy"
+      # ABIWORD: "usr/bin/abiword"
+    ports:
+      - "9001:9001"
+    restart: always
+  etherpad-database:
+    image: postgres:12
+    container_name: etherpad_db
+    volumes:
+      - etherpad_db_volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: "etherpad"
+      POSTGRES_USER: "etherpad"
+      POSTGRES_PASSWORD: "traincascade"
+    restart: always
+#networks:
+#  default:
+#    external: True
+#    name: oona.v2
+
+volumes:
+  etherpad_db_volume:
